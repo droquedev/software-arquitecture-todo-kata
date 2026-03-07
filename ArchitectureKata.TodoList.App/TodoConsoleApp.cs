@@ -12,7 +12,7 @@ public class TodoConsoleApp
     private readonly IUseCase<CreateTaskRequest, CreateTaskResult> _createTask;
     private readonly IUseCase<ListTasksRequest, IReadOnlyList<TaskItem>> _listTasks;
     private readonly IUseCase<EditTaskRequest, EditTaskResult> _editTask;
-
+    private readonly IUseCase<DuplicateTaskRequest, DuplicateTaskResult> _duplicateTask;
     private User? _currentUser;
 
     public TodoConsoleApp(
@@ -20,13 +20,15 @@ public class TodoConsoleApp
         IUseCase<LoginRequest, LoginResult> login,
         IUseCase<CreateTaskRequest, CreateTaskResult> createTask,
         IUseCase<ListTasksRequest, IReadOnlyList<TaskItem>> listTasks,
-        IUseCase<EditTaskRequest, EditTaskResult> editTask)
+        IUseCase<EditTaskRequest, EditTaskResult> editTask,
+        IUseCase<DuplicateTaskRequest, DuplicateTaskResult> duplicateTask)
     {
         _createAccount = createAccount;
         _login = login;
         _createTask = createTask;
         _listTasks = listTasks;
         _editTask = editTask;
+        _duplicateTask = duplicateTask;
     }
 
     public async Task<int> RunAsync()
@@ -56,6 +58,8 @@ public class TodoConsoleApp
                     await DoListTasksAsync();
                 else if (action == LandingAction.EditTask)
                     await DoEditTaskAsync();
+                else if (action == LandingAction.DuplicateTask)
+                    await DoDuplicateTaskAsync();
             }
         }
     }
@@ -140,6 +144,7 @@ public class TodoConsoleApp
         Console.WriteLine("  3 (ct)  Create Task");
         Console.WriteLine("  4 (lt)  List all tasks");
         Console.WriteLine("  5 (et)  Edit task");
+        Console.WriteLine("  6 (dt)  Duplicate task");
         Console.Write("Choice: ");
         var input = (Console.ReadLine() ?? "").Trim().ToLowerInvariant();
         if (input is "2" or "lx") return LandingAction.LogoutAndExit;
@@ -147,11 +152,12 @@ public class TodoConsoleApp
         if (input is "3" or "ct") return LandingAction.CreateTask;
         if (input is "4" or "lt") return LandingAction.ListTasks;
         if (input is "5" or "et") return LandingAction.EditTask;
+        if (input is "6" or "dt") return LandingAction.DuplicateTask;
         Console.WriteLine("Unknown option.");
         return LandingAction.None;
     }
 
-    private enum LandingAction { None, Logout, LogoutAndExit, CreateTask, ListTasks, EditTask }
+    private enum LandingAction { None, Logout, LogoutAndExit, CreateTask, ListTasks, EditTask, DuplicateTask }
 
     private async Task DoCreateTaskAsync()
     {
@@ -219,5 +225,34 @@ public class TodoConsoleApp
             Console.WriteLine(result.Error ?? "Failed to edit task.");
         else
             Console.WriteLine("Task updated.");
+    }
+
+    private async Task DoDuplicateTaskAsync()
+    {
+        var tasks = (await _listTasks.ExecuteAsync(new ListTasksRequest(_currentUser!.Id))).ToList();
+        if (tasks.Count == 0)
+        {
+            Console.WriteLine("No tasks to duplicate.");
+            return;
+        }
+        Console.WriteLine("Which task to duplicate?");
+        for (var i = 0; i < tasks.Count; i++)
+            Console.WriteLine($"  {i + 1}. [{tasks[i].Status}] {tasks[i].Title}");
+        Console.Write("Task number to duplicate: ");
+        var line = Console.ReadLine()?.Trim() ?? "";
+        if (!int.TryParse(line, out var num) || num < 1 || num > tasks.Count)
+        {
+            Console.WriteLine("Invalid number.");
+            return;
+        }
+        var task = tasks[num - 1];
+        Console.Write($"New title (Enter to keep '{task.Title}'): ");
+        var titleLine = Console.ReadLine()?.Trim();
+
+        var result = await _duplicateTask.ExecuteAsync(new DuplicateTaskRequest(task.Id, _currentUser!.Id, titleLine));
+        if (!result.Success)
+            Console.WriteLine(result.Error ?? "Failed to duplicate task.");
+        else
+            Console.WriteLine("Task duplicated.");
     }
 }
