@@ -1,0 +1,19 @@
+Todo List - Architecture Kata
+
+Usage:
+  dotnet run --project ArchitectureKata.TodoList.App
+  ArchitectureKata.TodoList.App --help   (or -h)  Show this help.
+
+Top Level Menu (not logged in):
+  1, li    Login
+  2, ca    Create Account
+  3, e     Exit
+
+Landing Menu (after login):
+  1, lo    Logout
+  2, lx    Logout & Exit
+  3, ct    Create Task
+  4, lt    List all tasks
+  5, et    Edit task (title, comments, status)
+
+Task status: Pending, InProgress, Done
