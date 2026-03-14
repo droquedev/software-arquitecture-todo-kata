@@ -2,6 +2,12 @@
 
 Documentación de las decisiones de arquitectura y ejemplos de degradación del proyecto Todo List.
 
+## C4 Model
+
+Visión general del sistema en cuatro niveles: contexto, contenedores, componentes y código.
+
+- [Ver C4 Model](./c4.md)
+
 ## Decisiones de Arquitectura (ADRs)
 
 | # | Decisión | Estado |

@@ -6,7 +6,7 @@ Aprobado
 
 ## Contexto
 
-El proyecto es un todo app de aprendizaje. El objetivo es practicar principios de arquitectura de software. Se necesita una estructura que permita separar las responsabilidades entre la presentación, la lógica de negocio y la persistencia, facilitando la comprensión del flujo de dependencias y la evolución del código a lo largo de la vida del software.
+El proyecto es un todo app. El objetivo es practicar principios de arquitectura de software. Se necesita una estructura que permita separar las responsabilidades entre la presentación, la lógica de negocio y la persistencia, facilitando la comprensión del flujo de dependencias.
 
 Sin la separación por capas, el código tiende a acoplarse, dificultando las pruebas, el reemplazo de implementaciones y la comprensión de las responsabilidades de cada componente.
 
