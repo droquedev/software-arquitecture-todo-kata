@@ -1,4 +1,4 @@
-# Software Architecture Todo Kata
+# Software Architecture Todo Kata!
 
 A console TODO list application for practicing layered architecture: App → UseCases → Commands & Queries → Repositories.
 
