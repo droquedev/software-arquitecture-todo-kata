@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ArchitectureKata.TodoList.Cqrs\ArchitectureKata.TodoList.Cqrs.csproj" />
+    <ProjectReference Include="..\ArchitectureKata.TodoList.Infra\ArchitectureKata.TodoList.Infra.csproj" />
   </ItemGroup>
 
 </Project>

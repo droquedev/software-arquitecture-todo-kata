@@ -13,5 +13,7 @@ public class DuplicateTaskUseCase : IUseCase<DuplicateTaskRequest, DuplicateTask
     }
 
     public Task<DuplicateTaskResult> ExecuteAsync(DuplicateTaskRequest input, CancellationToken cancellationToken = default)
-        => _command.ExecuteAsync(input, cancellationToken);
+    {
+        return _command.ExecuteAsync(input, cancellationToken);
+    }
 }

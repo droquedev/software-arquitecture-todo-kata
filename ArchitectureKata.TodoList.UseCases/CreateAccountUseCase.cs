@@ -13,5 +13,7 @@ public class CreateAccountUseCase : IUseCase<CreateAccountRequest, CreateAccount
     }
 
     public Task<CreateAccountResult> ExecuteAsync(CreateAccountRequest input, CancellationToken cancellationToken = default)
-        => _command.ExecuteAsync(input, cancellationToken);
+    {
+        return _command.ExecuteAsync(input, cancellationToken);
+    }
 }
